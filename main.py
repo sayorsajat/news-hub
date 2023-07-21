@@ -28,7 +28,7 @@ class NewsTable(Base):
 
     id = Column(Integer, primary_key=True)
     type = Column(String)
-    title = Column(String)
+    title = Column(String, unique=True)
     descriptionUrl = Column(String)
     content = Column(String)
     language = Column(String)
@@ -39,6 +39,6 @@ Base.metadata.create_all(engine)
 
 for url in URLs:
     collect_titles_dynamic(session, NewsTable, url)
-    sleep(0.5)
+    sleep(4)
 
 session.close()

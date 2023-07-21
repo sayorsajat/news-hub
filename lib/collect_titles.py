@@ -6,17 +6,26 @@ import requests
 
 def get_full_row(links, URL):
     data = []
+    
     for link in links:
         href = link["href"]
-        data.append({"type": classic_news_type, "title": link["text"], "descriptionUrl": f"{URL}{href}", 
+
+        descriptionUrl = ""
+        if(href.startswith("http")):
+            descriptionUrl = f"{href}"
+        else:
+            descriptionUrl = f"{URL}{href}"
+        
+        data.append({"type": classic_news_type, "title": link["text"], "descriptionUrl": descriptionUrl, 
                      "content": None, "language": english_language, "source": URL})
 
     return data
 
 
 def collect_titles_dynamic(session, NewsTable, URL):
+    headers = {"User-Agent": "Mozilla/5.0 (X11; Linux i686; rv:109.0) Gecko/20100101 Firefox/115.0"}
 
-    page = requests.get(URL)
+    page = requests.get(URL, headers=headers)
     
     soup = BeautifulSoup(page.content, 'html.parser')
     links = []
@@ -30,11 +39,11 @@ def collect_titles_dynamic(session, NewsTable, URL):
         else:
             # Check the attribute values of the <a> tag
             for attr_name, attr_value in a_tag.attrs.items():
-                if isinstance(attr_value, str):
+                if isinstance(attr_value, str) and attr_name != 'href':
                     if len(re.findall(r'\w+', attr_value)) > 3 and '|' not in attr_value and '/' not in attr_value:
                         link = {'text': a_tag.get_text().strip(), 'href': a_tag['href'].strip()}
                         links.append(link)
-                        break  # Stop searching for other attributes if a valid one is found
+                        break
 
 
     data = get_full_row(links, URL)
