@@ -1,8 +1,9 @@
+import csv
 import os
 from dotenv import load_dotenv
 from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.orm import sessionmaker, declarative_base
-from lib.constants import table_name, URLs
+from lib.constants import table_name
 from lib.collect_titles import collect_titles_dynamic
 from time import sleep
 
@@ -37,8 +38,12 @@ class NewsTable(Base):
 # Create the table if it doesn't already exist
 Base.metadata.create_all(engine)
 
-for url in URLs:
-    collect_titles_dynamic(session, NewsTable, url)
-    sleep(4)
+with open("./lib/news_sources.csv", 'r') as file:
+    csv_file = csv.DictReader(file, delimiter=';')
+    for row in csv_file:
+        collect_titles_dynamic(session, NewsTable, row["website"])
+        sleep(4)
+    file.close()
+    
 
 session.close()
