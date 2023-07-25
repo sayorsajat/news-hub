@@ -1,4 +1,5 @@
-from data_util.writeNews import writeNews
+import time
+from data_util.writeNews import writeTitles
 from bs4 import BeautifulSoup
 from lib.constants import classic_news_type, english_language
 import re
@@ -48,4 +49,4 @@ def collect_titles_dynamic(session, NewsTable, URL):
 
     data = get_full_row(links, URL)
 
-    writeNews(data, session, NewsTable)
+    writeTitles(data, session, NewsTable)
