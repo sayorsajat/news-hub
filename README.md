@@ -32,7 +32,7 @@ url_of_your_website;no
 It depends on whether the description of the news is available to everyone
 
 ### TODO:
-- [ ] description gathering
+- [x] description gathering
 - [ ] gui for news viewing
 - [ ] importance analyzing
 - [ ] set up script
