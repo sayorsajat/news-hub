@@ -1,5 +1,4 @@
 from sqlalchemy.dialects.postgresql import insert
-import logging
 
 def writeTitles(rows, session, NewsTable):
     # Perform bulk insert, inserting only unique rows
@@ -16,7 +15,7 @@ def writeDescription(description, row_id, session, NewsTable):
     if row_to_update:
         row_to_update.content = description
         session.commit()
-        print("inserted description successfully")
+        print("Description successfully written to row!")
     else:
         print(f"Row with id: {row_id} not found!")
     

@@ -8,7 +8,6 @@ def collect_description_dynamic(session, NewsTable, URL, ID):
     headers = {"User-Agent": "Mozilla/5.0 (X11; Linux i686; rv:109.0) Gecko/20100101 Firefox/115.0"}
 
     page = requests.get(URL, headers=headers)
-    print("requested description")
 
     soup = BeautifulSoup(page.content, 'html.parser')
     description = ""
