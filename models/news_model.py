@@ -1,6 +1,7 @@
 from lib.constants import table_name
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.orm import declarative_base
+from sqlalchemy.sql import func
 
 # Define a SQLAlchemy model
 Base = declarative_base()
@@ -16,3 +17,4 @@ class NewsTable(Base):
     content = Column(String)
     language = Column(String)
     source = Column(String)
+    created_at = Column(DateTime, default=func.now())

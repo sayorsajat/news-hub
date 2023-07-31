@@ -5,17 +5,24 @@ from lib.constants import classic_news_type, english_language
 import re
 import requests
 
+def getDescriptionUrl(URL, href):
+    descriptionUrl = ""
+    if not URL.endswith("/"):
+        URL = URL + '/' 
+    if(href.startswith("http")):
+        descriptionUrl = f"{href}"
+    else:
+        descriptionUrl = f"{URL}{href}"
+    return descriptionUrl
+
 def get_full_row(links, URL):
     data = []
     
     for link in links:
         href = link["href"]
 
-        descriptionUrl = ""
-        if(href.startswith("http")):
-            descriptionUrl = f"{href}"
-        else:
-            descriptionUrl = f"{URL}{href}"
+        descriptionUrl = getDescriptionUrl(URL, href)
+        
         
         data.append({"type": classic_news_type, "title": link["text"], "descriptionUrl": descriptionUrl, 
                      "content": None, "language": english_language, "source": URL})
