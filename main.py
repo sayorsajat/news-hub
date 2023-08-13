@@ -49,15 +49,15 @@ def gather():
             file.close()
         
         print("All news and descriptions collected!")
-        sleep(240)
+        sleep(1800)
 
-server_thread = threading.Thread(target=run_server)
-server_thread.start()
+# server_thread = threading.Thread(target=run_server)
+# server_thread.start()
 
 gather_thread = threading.Thread(target=gather)
 gather_thread.start()
 
-server_thread.join()
+# server_thread.join()
 gather_thread.join()
 
 session.close()
