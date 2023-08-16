@@ -1,26 +1,25 @@
 import threading
 import csv
-from http.server import HTTPServer
 from time import sleep
 from lib.constants import (
     delay_of_fetching_titles, 
     delay_of_fetching_content_between_same_source,
-    web_server_port
+    web_server_port,
+    web_server_host
     )
 from lib.collect_titles import collect_titles_dynamic
 from lib.collect_description import collect_description_dynamic
 from models.news_model import NewsTable
 from models.engine import Session
-from controller.server import HTTPHandler
+from controller.server import app
+import uvicorn
 
 session = Session()
 
 # async running server, so that it doesn't block further code
 def run_server():
-    server_address = ("", web_server_port)
-    httpd = HTTPServer(server_address, HTTPHandler)
+    uvicorn.run(app, port=web_server_port, host=web_server_host)
     print(f"Server running on port {web_server_port}...")
-    httpd.serve_forever()
 
 def gather():
     while True:
@@ -51,13 +50,13 @@ def gather():
         print("All news and descriptions collected!")
         sleep(1800)
 
-# server_thread = threading.Thread(target=run_server)
-# server_thread.start()
+server_thread = threading.Thread(target=run_server)
+server_thread.start()
 
 gather_thread = threading.Thread(target=gather)
 gather_thread.start()
 
-# server_thread.join()
+server_thread.join()
 gather_thread.join()
 
 session.close()

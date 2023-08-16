@@ -9,3 +9,4 @@ delay_of_fetching_titles = 4
 delay_of_fetching_content_between_same_source = 4
 
 web_server_port = 25000
+web_server_host = "localhost"
