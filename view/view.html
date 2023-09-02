@@ -1,29 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>news hub</title>
-    <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Draggable Dashboard</title>
+<link rel="stylesheet" type="text/css" href="styles.css" />
 </head>
 <body>
-    <script type="importmap">
-        {
-            "imports": {
-            "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
-            }
-        }
-    </script>
-
-    <div id="app">
-        <div class="scroll-container">
-            <div class="list-item">{{ items[currentItem] }}</div>
+    <!-- adding cards -->
+  <button id="addCardBtn">
+    <img src="./media/plus_icon.svg" alt="Add Card">
+  </button>
+  <div class="modal-overlay" id="newCardModalOverlay">
+    <div class="modal" id="newCardModalContent">
+        <div class="horizontal-grid-container">
+            <h3>Filter Keywords</h3>
+            <button class="ghost-button" id="newKeywordBtn">
+                Add new keyword
+            </button>
         </div>
-        <div class="arrow up" @click="scrollUp">▲</div>
-        <div class="arrow down" @click="scrollDown">▼</div>
+        <hr>
+        <form id="newCardForm">
+            <div id="keywordsList">
+            </div>
+            <input
+                type="submit" 
+                class="ghost-button"
+                style="background-color: #5cdb5cee;"
+                value="confirm"
+            >
+            </input>
+        </form>
+        
     </div>
+  </div>
 
-    <script src="http://localhost:25000/view/script.js" type="module"></script>
+  <!-- cards -->
+  <div class="dashboard" id="dashboard"></div>
+
+  <!-- expanding cards -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="modalContent">
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>

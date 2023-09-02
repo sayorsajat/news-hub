@@ -53,10 +53,10 @@ def gather():
 server_thread = threading.Thread(target=run_server)
 server_thread.start()
 
-gather_thread = threading.Thread(target=gather)
-gather_thread.start()
+# gather_thread = threading.Thread(target=gather)
+# gather_thread.start()
 
 server_thread.join()
-gather_thread.join()
+# gather_thread.join()
 
 session.close()
