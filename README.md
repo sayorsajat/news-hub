@@ -33,6 +33,6 @@ It depends on whether the description of the news is available to everyone
 
 ### TODO:
 - [x] description gathering
-- [ ] gui for news viewing
+- [x] gui for news viewing
 - [ ] importance analyzing
 - [ ] set up script
