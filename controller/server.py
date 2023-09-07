@@ -1,6 +1,8 @@
 import json
-from fastapi import FastAPI, HTTPException
+import os
+from fastapi import FastAPI, HTTPException, Body
 from fastapi.responses import JSONResponse
+from fastapi.responses import Response
 from fastapi.encoders import jsonable_encoder
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
@@ -80,3 +82,14 @@ async def get_recent_news(keywords: list[dict]):
     response_data = [news_to_dict(news) for news in recent_news]
     response_json = jsonable_encoder(response_data)
     return JSONResponse(content=response_json)
+
+@app.put("/user/viewSettings", response_class=Response)
+async def save_user_view_settings(html_fragment: str = Body(..., media_type="text/html")):
+    # Path to the "user_view.html" file
+    file_path = os.path.join("view", "user_view.html")
+
+    # Write the received HTML fragment to the file (create or overwrite)
+    with open(file_path, "w") as file:
+        file.write(html_fragment)
+
+    return Response(status_code=200)

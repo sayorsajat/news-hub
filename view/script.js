@@ -17,6 +17,67 @@ async function fetchRecentNews(keywords) {
     return response.json();
 }
 
+// send html of dashboard to server in order to save all keywords settings
+function updateCardsSave() {
+    // Clone the dashboard element to avoid modifying the displayed GUI
+    const dashboard = document.getElementById('dashboard');
+    const clonedDashboard = dashboard.cloneNode(true);
+
+    // Remove text content from specific elements (e.g., <p> and <h3> tags)
+    const elementsToRemoveTextFrom = clonedDashboard.querySelectorAll('p, h3');
+    elementsToRemoveTextFrom.forEach(element => {
+        element.textContent = ''; // Remove the text content
+    });
+
+    // Get the HTML fragment from the cloned and modified dashboard
+    const htmlFragment = clonedDashboard.innerHTML;
+
+    // Make a PUT request to your endpoint
+    const requestOptions = {
+        method: "PUT",
+        body: htmlFragment,
+        headers: {
+            "Content-Type": "text/html",
+        },
+    };
+
+    fetch("http://localhost:25000/user/viewSettings", requestOptions)
+    .then(response => {
+        if (response.ok) {
+            return;
+        } else {
+            console.error("Error uploading HTML fragment:", response.statusText);
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+    });
+}
+
+// Preload already saved cards
+async function loadCardsSave() {
+    try {
+        const url = 'http://localhost:25000/view/user_view.html';
+
+        const response = await fetch(url, {
+            cache: 'no-store', // Disable caching
+        });
+
+        if (response.ok) {
+            const dashboard = document.getElementById('dashboard');
+            const htmlFragment = await response.text();
+
+            dashboard.innerHTML = htmlFragment;
+        } else {
+            console.error('Error retrieving HTML fragment:', response.statusText);
+            return null;
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        return null;
+    }
+}
+
 // Preload the news data
 function parseKeywords(inputString) {
     const objectArray = [];
@@ -45,20 +106,21 @@ async function updateCards() {
         console.log(news);
 
         // set title and content of news for card
-        cards[i].getElementsByTagName("h3")[0].innerHTML = news[1].title;
-        cards[i].getElementsByClassName("card-content")[0].innerHTML = news[1].content;
+        cards[i].getElementsByTagName("h3")[0].innerHTML = news[0].title;
+        cards[i].getElementsByClassName("card-content")[0].innerHTML = news[0].content;
     }
 }
 
 // execution of preloading
-updateCards();
+loadCardsSave().then(() => updateCards())
+
 
 let index = 0;
 
 // part for adding cards
 const addCardBtn = document.getElementById('addCardBtn');
 const dashboard = document.getElementById('dashboard');
-let cardCounter = 1;
+let cardCounter = document.getElementsByClassName("card").length+1;
 
 function createCard(keywords) {
     const card = document.createElement('div');
@@ -71,9 +133,10 @@ function createCard(keywords) {
     card.setAttribute('keywords', _keywords);
 
     card.innerHTML = `
-    <h3>Card ${cardCounter}</h3>
-    <p class="card-content">lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum </p>
-    `;
+    <h3></h3>
+    <p class="card-content"></p>
+    `
+
     cardCounter++;
     return card;
 }
@@ -186,6 +249,7 @@ newCardForm.addEventListener("submit", async (event) => {
     dashboard.appendChild(newCard);
 
     await updateCards();
+    updateCardsSave();
 })
 
 
