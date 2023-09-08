@@ -32,8 +32,10 @@ input {
   margin-bottom: 5px;
 }
 
-#addCardBtn {
-  margin-top: 8px;
+#tools img {
+  margin-top: 16px;
+  height: 32px;
+  width: 32px;
 }
 
 .ghost-button {
@@ -102,6 +104,7 @@ input {
   padding: 0;
   margin-top: 3px;
   margin-bottom: -9px;
+  max-height: 65px;
 }
 
 .card-content {
@@ -133,4 +136,5 @@ input {
 
 .modal h3 {
   float: left;
+  margin-bottom: 14px;
 }

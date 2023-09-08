@@ -7,8 +7,8 @@ from lib.constants import (
     web_server_port,
     web_server_host
     )
-from lib.collect_titles import collect_titles_dynamic
-from lib.collect_description import collect_description_dynamic
+from parsing.collect_titles import collect_titles_dynamic
+from parsing.collect_description import collect_description_dynamic
 from models.news_model import NewsTable
 from models.engine import Session
 from controller.server import app

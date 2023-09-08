@@ -11,7 +11,6 @@ fastapi==0.101.1
 feedfinder2==0.0.4
 feedparser==6.0.10
 filelock==3.12.2
-gensim==4.3.2
 greenlet==2.0.2
 h11==0.14.0
 httpcore==0.17.3

@@ -8,32 +8,38 @@
 </head>
 <body>
     <!-- adding cards -->
-  <button id="addCardBtn">
-    <img src="./media/plus_icon.svg" alt="Add Card">
-  </button>
-  <div class="modal-overlay" id="newCardModalOverlay">
-    <div class="modal" id="newCardModalContent">
-        <div class="horizontal-grid-container">
-            <h3>Filter Keywords</h3>
-            <button class="ghost-button" id="newKeywordBtn">
-                Add new keyword
-            </button>
-        </div>
-        <hr>
-        <form id="newCardForm">
-            <div id="keywordsList">
-            </div>
-            <input
-                type="submit" 
-                class="ghost-button"
-                style="background-color: #5cdb5cee;"
-                value="confirm"
-            >
-            </input>
-        </form>
-        
+    <div id="tools">
+        <button id="addCardBtn">
+            <img src="./media/plus_icon.svg" alt="Add Card">
+        </button>
+        <button id="removeCardBtn">
+            <img src="./media/trash.svg" alt="Delete Card">
+        </button>
     </div>
-  </div>
+
+    <div class="modal-overlay" id="newCardModalOverlay">
+        <div class="modal" id="newCardModalContent">
+            <div class="horizontal-grid-container">
+                <h3>Filter Keywords</h3>
+                <button class="ghost-button" id="newKeywordBtn">
+                    Add new keyword
+                </button>
+            </div>
+            <hr>
+            <form id="newCardForm">
+                <div id="keywordsList">
+                </div>
+                <input
+                    type="submit"
+                    class="ghost-button"
+                    style="background-color: #5cdb5cee;"
+                    value="confirm"
+                >
+                </input>
+            </form>
+
+        </div>
+    </div>
 
   <!-- cards -->
   <div class="dashboard" id="dashboard"></div>
@@ -45,6 +51,6 @@
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
-  <script src="script.js"></script>
+  <script type="module" src="script.js"></script>
 </body>
 </html>

@@ -1,14 +1,14 @@
 import json
 import os
 from fastapi import FastAPI, HTTPException, Body
-from fastapi.responses import JSONResponse
-from fastapi.responses import Response
+from fastapi.responses import JSONResponse, Response
 from fastapi.encoders import jsonable_encoder
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
 from models.engine import Session
 from models.news_model import NewsTable
 from sqlalchemy import or_, and_
+
 
 def news_to_dict(news):
     # Convert a NewsTable object to a dictionary
@@ -22,9 +22,11 @@ def news_to_dict(news):
         "source": news.source,
     }
 
+
 app = FastAPI()
 
 app.mount("/view", StaticFiles(directory="view"), name="view")
+
 
 @app.post("/news/getRecent")
 async def get_recent_news(keywords: list[dict]):
@@ -82,6 +84,7 @@ async def get_recent_news(keywords: list[dict]):
     response_data = [news_to_dict(news) for news in recent_news]
     response_json = jsonable_encoder(response_data)
     return JSONResponse(content=response_json)
+
 
 @app.put("/user/viewSettings", response_class=Response)
 async def save_user_view_settings(html_fragment: str = Body(..., media_type="text/html")):

@@ -6,9 +6,10 @@ from sqlalchemy.sql import func
 # Define a SQLAlchemy model
 Base = declarative_base()
 
+
 # Define a SQLAlchemy table
 class NewsTable(Base):
-    __tablename__ =  table_name
+    __tablename__ = table_name
 
     id = Column(Integer, primary_key=True)
     type = Column(String)
