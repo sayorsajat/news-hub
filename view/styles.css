@@ -138,3 +138,9 @@ input {
   float: left;
   margin-bottom: 14px;
 }
+
+
+
+.removal-mode {
+    border: 1px solid red;
+}

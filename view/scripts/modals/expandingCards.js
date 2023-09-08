@@ -1,4 +1,5 @@
 import {openModal, setUpModalClosing} from "./modalWindows.js";
+import {isRemoveMode} from "../deletingCards.js";
 
 export function setExpandingCardsUp() {
     // cards modals (expanding full text)
@@ -10,6 +11,8 @@ export function setExpandingCardsUp() {
     setUpModalClosing(modalOverlay);
 
     dashboard.addEventListener('click', (event) => {
+        if(isRemoveMode()) return;
+        
         const card = event.target.closest('.card');
 
         const heading = card.querySelector('h3').textContent;

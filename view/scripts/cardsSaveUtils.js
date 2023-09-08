@@ -12,6 +12,15 @@ export function updateCardsSave() {
     elementsToRemoveTextFrom.forEach(element => {
         element.textContent = ''; // Remove the text content
     });
+    // remove everything from a links
+    clonedDashboard.querySelectorAll('a').forEach(element => {
+        element.textContent = ''; // Remove the text content
+        element.href = ''; // remove href
+    });
+    // delete remove-mode from class list before sending
+    clonedDashboard.querySelectorAll('div').forEach(element => {
+        element.classList.remove("removal-mode");
+    });
 
     // Get the HTML fragment from the cloned and modified dashboard
     const htmlFragment = clonedDashboard.innerHTML;
@@ -38,9 +47,11 @@ export async function updateCards() {
         const keywordsArray = parseKeywords(keywordsString);
 
         const news = await fetchRecentNews(keywordsArray);
-        console.log(JSON.stringify(keywordsArray));
 
-        console.log(news);
+        if(news.length === 0) {
+            cards[i].getElementsByTagName("h3")[0].innerHTML = "No news for now";
+            continue;
+        }
 
         // set title and content of news for card
         cards[i].getElementsByTagName("h3")[0].innerHTML = news[0].title;
