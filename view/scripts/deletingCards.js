@@ -7,16 +7,17 @@ export function addCardsRemoval() {
     const dashboard = document.getElementById("dashboard");
 
     removeCardBtn.addEventListener("click", () => {
-        removeMode = !removeMode; // Toggle the removeMode flag
-        toggleRemoveIndicator(); // Toggle the removal indicator
+        removeMode = !removeMode;
+        toggleRemoveIndicator();
     });
 
     dashboard.addEventListener("click", (event) => {
-        if (removeMode && event.target.classList.contains("card")) {
-            event.target.remove();
+        if (removeMode) {
+            event.target.closest(".card").remove();
             updateCardsSave();
         }
     });
+
 
     function toggleRemoveIndicator() {
         const cards = document.querySelectorAll(".card");
@@ -28,8 +29,6 @@ export function addCardsRemoval() {
             }
         });
     }
-
-
 }
 
 export function isRemoveMode() {

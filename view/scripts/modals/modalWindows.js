@@ -28,7 +28,7 @@ export function setUpModalClosing(overlay, modal_content) {
     });
 }
 
-export function createCard(keywords) {
+export function createCard(keywords, topic) {
     let _keywords = "";
     keywords.map((keyword) => _keywords += `${Object.keys(keyword)[0]}: ${Object.values(keyword)[0]};`)
 
@@ -37,12 +37,17 @@ export function createCard(keywords) {
     card.id = `cardWith${_keywords}`;
 
     // insert keywords to html
-
     card.setAttribute('keywords', _keywords);
 
     card.innerHTML = `
-    <h3></h3>
-    <p class="card-content"></p>
+    <div id="indicator"></div>
+    <h3 id="topicContainer">
+        <span id="topic">${topic}</span>
+    </h3>
+    <div class="clickable">
+        <h3 id="heading"></h3>
+        <p class="card-content"></p>
+    </div>
     <a></a>
     `
 

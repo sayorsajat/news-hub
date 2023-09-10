@@ -6,7 +6,7 @@ body {
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
-  background-color: #f0f0f0;
+  background-color: #1c2d3e;
 }
 
 h3 {
@@ -17,11 +17,17 @@ h3 {
   display: flex; /* Use flexbox */
   align-items: center; /* Vertically center items */
   justify-content: space-between; /* Distribute items horizontally */
-  height: 40px;
+  height: 35px;
   width: 100%;
 }
+.horizontal-grid-container h3 {
+  display: flex; /* Use flexbox */
+  position: relative;
+  align-items: center; /* Vertically center items */
+  margin-top: 12px;
+}
 
-/* addin cards form related */
+/* adding cards form related */
 button {
   border: none;
   background: none;
@@ -30,6 +36,15 @@ button {
 
 input {
   margin-bottom: 5px;
+  font-size: medium;
+}
+input::placeholder {
+  color: black;
+  opacity: 1;
+}
+input:placeholder-shown {
+  color: black;
+  opacity: 1;
 }
 
 #tools img {
@@ -65,17 +80,36 @@ input {
   background-color: #222222;
 }
 
-#keywordsList {
-  text-align: center;
-}
 #keywordsList input {
+  font-size: small;
+  justify-content: center;
   width: 46%;
   height: 28px;
   border: 1px solid #111;
   transition: .3s background-color;
+  margin-left: 1.6%;
 }
 #keywordsList input:hover {
   background-color: #fafafa;
+}
+#keywordsList input::placeholder {
+  font-size: 13px;
+}
+
+#topicInput {
+  width: 92%;
+  height: 28px;
+  border: 1px solid #111;
+  transition: .3s background-color;
+  display: block; /* Make input a block-level element */
+  margin: 0 auto 10px; /* Center input horizontally */
+  text-align: center; /* Center text horizontally */
+}
+
+/* Style for the submit button */
+#newCardForm input[type="submit"] {
+  background-color: rgb(0, 205, 0); /* Green color */
+  color: #ffffff;
 }
 
 /* card layout */
@@ -89,19 +123,21 @@ input {
 
 .card {
   background-color: #ffffff;
-  border-radius: 5px;
-  max-height: 38.95vh;
-  min-height: 38.95vh;
+  border-radius: 0 0 10px 10px;
+  max-height: 39.8vh;
+  min-height: 39.8vh;
   height: auto !important;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   padding: 10px;
-  cursor: pointer;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: normal; 
+  white-space: normal;
+  position: relative;
+  z-index: 1;
 }
+
 .card h3 {
-  padding: 0;
+  position: relative;
   margin-top: 3px;
   margin-bottom: -9px;
   max-height: 65px;
@@ -111,6 +147,61 @@ input {
   white-space: normal;
   overflow: hidden;
   text-overflow: ellipsis;
+  position: relative;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+#topicContainer {
+  max-height: 75px;
+  min-height: 55px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  background-color: #0f1923;
+  color: white;
+  padding: 0;
+  margin-left: -10px;
+  margin-right: -10px;
+  width: calc(100% + 20px);
+  margin-bottom: 10px;
+  position: relative;
+  z-index: 2;
+  transform: translateY(-6px);
+}
+
+#topic {
+  cursor: text;
+  padding: 10px;
+  position: relative;
+  z-index: 3;
+}
+
+#indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 7px; /* Adjust the height as needed */
+  z-index: 4; /* Place it above #topicContainer */
+}
+
+.mundane {
+  background-color: #A4ABB6; /* Color for state 1 */
+}
+.interesting {
+  background-color: #56F000; /* Color for state 1 */
+}
+.must-know-for-decision {
+  background-color: #FCE83A; /* Color for state 1 */
+}
+.must-react {
+  background-color: #FFB302; /* Color for state 1 */
+}
+.must-react-right-now {
+  background-color: #FF3838; /* Color for state 1 */
 }
 
 /* modal windows */
@@ -124,6 +215,7 @@ input {
   background-color: rgba(0, 0, 0, 0.5);
   justify-content: center;
   align-items: center;
+  z-index: 2;
 }
 .modal {
   background-color: #ffffff;
@@ -138,8 +230,6 @@ input {
   float: left;
   margin-bottom: 14px;
 }
-
-
 
 .removal-mode {
     border: 1px solid red;

@@ -34,5 +34,6 @@ It depends on whether the description of the news is available to everyone
 ### TODO:
 - [x] description gathering
 - [x] gui for news viewing
-- [ ] importance analyzing
-- [ ] set up script
+- [x] urgency measurement
+- [ ] multiple dashboards accessed by id
+- [ ] deploy

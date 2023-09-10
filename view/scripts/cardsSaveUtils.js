@@ -8,7 +8,7 @@ export function updateCardsSave() {
     const clonedDashboard = dashboard.cloneNode(true);
 
     // Remove text content from specific elements (e.g., <p> and <h3> tags)
-    const elementsToRemoveTextFrom = clonedDashboard.querySelectorAll('p, h3');
+    const elementsToRemoveTextFrom = clonedDashboard.querySelectorAll('p, #heading');
     elementsToRemoveTextFrom.forEach(element => {
         element.textContent = ''; // Remove the text content
     });
@@ -18,8 +18,15 @@ export function updateCardsSave() {
         element.href = ''; // remove href
     });
     // delete remove-mode from class list before sending
-    clonedDashboard.querySelectorAll('div').forEach(element => {
-        element.classList.remove("removal-mode");
+    clonedDashboard.querySelectorAll('div .card').forEach(element => {
+        element.classList = ["card"];
+    });
+    // clear indicator status before sending
+    clonedDashboard.querySelectorAll('div #indicator').forEach(element => {
+        element.classList = [];
+    });
+    clonedDashboard.querySelectorAll('div .clickable').forEach(element => {
+        element.classList = element.classList[0];
     });
 
     // Get the HTML fragment from the cloned and modified dashboard
@@ -41,7 +48,7 @@ export async function loadCardsSave() {
 
 // Preload the news data to cards
 export async function updateCards() {
-    const cards = document.getElementsByClassName("card")
+    const cards = document.querySelectorAll(".card")
     for (let i = 0; i < cards.length; i++) {
         const keywordsString = cards[i].getAttribute("keywords");
         const keywordsArray = parseKeywords(keywordsString);
@@ -53,12 +60,20 @@ export async function updateCards() {
             continue;
         }
 
+        const urgency = urgencyToColorClass(news[0].urgency);
+
+        // set indicator level
+        cards[i].querySelector("#indicator").classList = urgency;
         // set title and content of news for card
-        cards[i].getElementsByTagName("h3")[0].innerHTML = news[0].title;
+        cards[i].querySelector("#heading").innerHTML = news[0].title;
         cards[i].getElementsByClassName("card-content")[0].innerHTML = news[0].content;
         const link = cards[i].getElementsByTagName("a")[0];
         link.href = news[0].descriptionUrl;
-        link.innerHTML = news[0].descriptionUrl;
+        link.innerHTML = news[0].source;
+
+        if(urgency !== "mundane") {
+            cards[i].classList.add(urgency);
+        }
     }
 }
 
@@ -75,4 +90,18 @@ function parseKeywords(inputString) {
     }
 
     return objectArray;
+}
+
+function urgencyToColorClass(urgency){
+    if (urgency < 2) {
+        return "mundane"
+    } else if (urgency < 4) {
+        return "interesting"
+    } else if (urgency < 6) {
+        return "must-know-for-decision"
+    } else if (urgency < 8) {
+        return "must-react"
+    } else if (urgency >= 8) {
+        return "must-react-right-now"
+    }
 }

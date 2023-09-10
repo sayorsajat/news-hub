@@ -12,20 +12,24 @@ export function setExpandingCardsUp() {
 
     dashboard.addEventListener('click', (event) => {
         if(isRemoveMode()) return;
-        
+        if(event.target.closest(".clickable")) {
         const card = event.target.closest('.card');
 
-        const heading = card.querySelector('h3').textContent;
+        const heading = card.querySelector('#heading').textContent;
         const content = card.querySelector('.card-content').textContent;
-        const sourceUrl = card.querySelector('a').href;
+        const source = card.querySelector('a');
+        const sourceUrl = source.href;
+        const sourceBaseUrl = source.textContent;
 
         const modalHtml = `
             <h3>${heading}</h3>
             <p>${content}</p>
-            <a href=${sourceUrl}>${sourceUrl}</a>
+            <a href=${sourceUrl}>${sourceBaseUrl}</a>
         `
         if (card) {
             openModal(modalHtml, modalOverlay, modalContent);
         }
+        }
+
     });
 }

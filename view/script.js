@@ -4,6 +4,7 @@ import {setAddingCardsUp} from "./scripts/modals/addingCardsModal.js";
 import {addCardsRemoval} from "./scripts/deletingCards.js";
 
 
+document.addEventListener("DOMContentLoaded", () => {
 // execution of preloading
 loadCardsSave().then(() => updateCards())
 
@@ -23,4 +24,5 @@ const sortable = new Sortable(dashboard, {
         const draggedCard = event.item;
         dashboard.insertBefore(draggedCard, event.to.children[event.newIndex]);
     },
+});
 });

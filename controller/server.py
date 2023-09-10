@@ -1,13 +1,13 @@
-import json
 import os
 from fastapi import FastAPI, HTTPException, Body
 from fastapi.responses import JSONResponse, Response
 from fastapi.encoders import jsonable_encoder
 from fastapi.staticfiles import StaticFiles
-from sqlalchemy.orm import Session
 from models.engine import Session
 from models.news_model import NewsTable
 from sqlalchemy import or_, and_
+from typing import List
+from urgency_meter import measureUrgency
 
 
 def news_to_dict(news):
@@ -29,7 +29,7 @@ app.mount("/view", StaticFiles(directory="view"), name="view")
 
 
 @app.post("/news/getRecent")
-async def get_recent_news(keywords: list[dict]):
+async def get_recent_news(keywords: List[dict]):
     if not keywords:
         raise HTTPException(status_code=400, detail="No keywords provided")
 
@@ -75,24 +75,45 @@ async def get_recent_news(keywords: list[dict]):
     # Combine all conditions using AND
     final_condition = and_(combined_condition, content_not_none_condition)
 
-    # Query the NewsTable with the final condition and get recent news
-    recent_news = session.query(NewsTable).filter(final_condition) \
-        .order_by(NewsTable.id.desc()).limit(50).all()
+    # Query the NewsTable with the final condition and get all news
+    recent_news = session.query(NewsTable).filter(final_condition).all()
     session.close()
 
-    # Convert the list of NewsTable objects to a list of dictionaries
-    response_data = [news_to_dict(news) for news in recent_news]
+    # Calculate urgency for each news item and store it in response_data
+    response_data = []
+
+    # Sort the news by urgency in descending order
+    urgency_data = [(news, measureUrgency(news.title + "\n" + news.content, keywords)) for news in recent_news]
+    urgency_data.sort(key=lambda x: x[1], reverse=True)
+
+    # Get the two most urgent news items
+    most_urgent_news = urgency_data[:2]
+
+    for news, urgency in most_urgent_news:
+        news_dict = news_to_dict(news)
+        news_dict["urgency"] = urgency
+        response_data.append(news_dict)
+
+    # Convert the list of NewsTable objects to a list of dictionaries with urgency property
     response_json = jsonable_encoder(response_data)
+
+    # Return the JSON response with urgency property
     return JSONResponse(content=response_json)
 
 
 @app.put("/user/viewSettings", response_class=Response)
-async def save_user_view_settings(html_fragment: str = Body(..., media_type="text/html")):
+async def save_user_view_settings(html_fragment: str = Body(None, media_type="text/html")):
     # Path to the "user_view.html" file
     file_path = os.path.join("view", "user_view.html")
 
-    # Write the received HTML fragment to the file (create or overwrite)
-    with open(file_path, "w") as file:
-        file.write(html_fragment)
+    # Check if the HTML fragment is None or empty
+    if html_fragment is None or html_fragment.strip() == "":
+        # If it's None or empty, clear the file by opening it in write mode with an empty string
+        with open(file_path, "w") as file:
+            file.write("")
+    else:
+        # If it's not empty, write the received HTML fragment to the file (create or overwrite)
+        with open(file_path, "w") as file:
+            file.write(html_fragment)
 
     return Response(status_code=200)

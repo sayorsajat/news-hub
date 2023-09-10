@@ -7,6 +7,7 @@ export function setAddingCardsUp() {
     const newCardModalContent = document.getElementById("newCardModalContent");
     const newKeywordBtn = document.getElementById("newKeywordBtn");
     const keywordsList = document.getElementById("keywordsList");
+    const topicInput = document.getElementById("topicInput");
     const newCardForm = document.getElementById("newCardForm");
     const addCardBtn = document.getElementById('addCardBtn');
     const dashboard = document.getElementById('dashboard');
@@ -61,8 +62,10 @@ export function setAddingCardsUp() {
         closeModal(newCardModalOverlay);
         keywordsList.innerHTML = "";
 
-        let newCard = createCard(cardKeywords);
+        let newCard = createCard(cardKeywords, topicInput.value);
         dashboard.appendChild(newCard);
+
+        topicInput.value = "";
 
         await updateCards();
         updateCardsSave();
