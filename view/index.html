@@ -3,9 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <title>News Hub</title>
+    <link rel="stylesheet" type="text/css" href="/view/styles/cssFirstPage.css" />
+    <link rel="icon" type="image/x-icon" href="/view/media/scope-logo.png">
 </head>
 <body>
-    <div></div>
-    <script src="./scripts/dashboardNav.js"></script>
+    <div class="form-box">
+        <h2>Enter Dashboard Name</h2>
+        <h4>You will access your dashboard using its name, so you can come up with long one</h4>
+        <h5>Use only letters, numbers and underscore</h5>
+        <form id="form">
+            <div class="text-box">
+                <input id="nameInput" type="text" name="" required="">
+                <label>Dashboard Name</label>
+                <input id="submitBtn" type="submit" value="confirm"/>
+            </div>
+        </form>
+    </div>
+    <script src="/view/scripts/dashboardNav.js"></script>
 </body>
 </html>

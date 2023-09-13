@@ -16,10 +16,12 @@ import uvicorn
 
 session = Session()
 
+
 # async running server, so that it doesn't block further code
 def run_server():
     uvicorn.run(app, port=web_server_port, host=web_server_host)
     print(f"Server running on port {web_server_port}...")
+
 
 def gather():
     while True:

@@ -6,7 +6,7 @@ body {
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
-  background-color: #1c2d3e;
+  background: linear-gradient(#141e30, #1c2d3e)
 }
 
 h3 {
@@ -114,17 +114,24 @@ input:placeholder-shown {
 
 /* card layout */
 .dashboard {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 10px;
-  max-width: 70vw;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  gap: 30px;
+  max-width: 1500px;
   margin-top: 20px;
+  padding: 0 10px;
+  box-sizing: border-box;
+  text-align: center; /* Center text content */
 }
 
 .card {
   background-color: #ffffff;
+  max-width: 260px;
+  min-width: 100px;
   border-radius: 0 0 10px 10px;
-  max-height: 39.8vh;
+  max-height: min(39.8vh, 430px);
   min-height: 39.8vh;
   height: auto !important;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -136,12 +143,6 @@ input:placeholder-shown {
   z-index: 1;
 }
 
-.card h3 {
-  position: relative;
-  margin-top: 3px;
-  margin-bottom: -9px;
-  max-height: 65px;
-}
 
 .card-content {
   white-space: normal;
@@ -149,6 +150,7 @@ input:placeholder-shown {
   text-overflow: ellipsis;
   position: relative;
 }
+
 
 .clickable {
   cursor: pointer;
@@ -165,7 +167,7 @@ input:placeholder-shown {
   padding: 0;
   margin-left: -10px;
   margin-right: -10px;
-  width: calc(100% + 20px);
+  min-width: calc(100% + 30px);
   margin-bottom: 10px;
   position: relative;
   z-index: 2;
@@ -232,5 +234,5 @@ input:placeholder-shown {
 }
 
 .removal-mode {
-    border: 1px solid red;
+    border: 2px solid red;
 }

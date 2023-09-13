@@ -1,4 +1,5 @@
 import {sendCardsSave, fetchCardsSave, fetchRecentNews} from "./http.js";
+import {getDashboardId} from "./getIdSearchParam.js";
 
 
 // send html of dashboard to server in order to save all keywords settings
@@ -32,17 +33,23 @@ export function updateCardsSave() {
     // Get the HTML fragment from the cloned and modified dashboard
     const htmlFragment = clonedDashboard.innerHTML;
 
-    sendCardsSave(htmlFragment)
+    const dashboardId = getDashboardId()
+
+    sendCardsSave(htmlFragment, dashboardId)
 }
 
 // Preload already saved cards
-export async function loadCardsSave() {
+export async function loadCardsSave(dashboardId) {
     try {
         const dashboard = document.getElementById('dashboard');
-        dashboard.innerHTML = await fetchCardsSave();
+
+        const response = await fetchCardsSave(dashboardId);
+        if(response === false) return false;
+        dashboard.innerHTML = response;
+        return true;
     } catch (error) {
         console.error('Error:', error);
-        return null;
+        return false;
     }
 }
 
@@ -56,14 +63,16 @@ export async function updateCards() {
         const news = await fetchRecentNews(keywordsArray);
 
         if(news.length === 0) {
-            cards[i].getElementsByTagName("h3")[0].innerHTML = "No news for now";
+            cards[i].getElementsByClassName("card-content")[0].innerHTML = "No news for now";
+            // set indicator level to mundane
+            const urgency = "mundane";
+            cards[i].querySelector("#indicator").classList.add(urgency);
             continue;
         }
 
-        const urgency = urgencyToColorClass(news[0].urgency);
-
+        let urgency = urgencyToColorClass(news[0].urgency)
         // set indicator level
-        cards[i].querySelector("#indicator").classList = urgency;
+        cards[i].querySelector("#indicator").classList.add(urgency);
         // set title and content of news for card
         cards[i].querySelector("#heading").innerHTML = news[0].title;
         cards[i].getElementsByClassName("card-content")[0].innerHTML = news[0].content;

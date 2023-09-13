@@ -1,6 +1,7 @@
+import logging
 import os
 from fastapi import FastAPI, HTTPException, Body
-from fastapi.responses import JSONResponse, Response
+from fastapi.responses import JSONResponse, Response, FileResponse
 from fastapi.encoders import jsonable_encoder
 from fastapi.staticfiles import StaticFiles
 from models.engine import Session
@@ -8,6 +9,7 @@ from models.news_model import NewsTable
 from sqlalchemy import or_, and_
 from typing import List
 from urgency_meter import measureUrgency
+import re
 
 
 def news_to_dict(news):
@@ -26,6 +28,14 @@ def news_to_dict(news):
 app = FastAPI()
 
 app.mount("/view", StaticFiles(directory="view"), name="view")
+
+
+logging.basicConfig(level=logging.INFO)
+
+
+@app.get("/")
+async def serve_index():
+    return FileResponse("view/index.html")
 
 
 @app.post("/news/getRecent")
@@ -83,7 +93,7 @@ async def get_recent_news(keywords: List[dict]):
     response_data = []
 
     # Sort the news by urgency in descending order
-    urgency_data = [(news, measureUrgency(news.title + "\n" + news.content, keywords)) for news in recent_news]
+    urgency_data = [(news, measureUrgency(news.title + "\n ~ " + news.content, keywords)) for news in recent_news]
     urgency_data.sort(key=lambda x: x[1], reverse=True)
 
     # Get the two most urgent news items
@@ -101,10 +111,17 @@ async def get_recent_news(keywords: List[dict]):
     return JSONResponse(content=response_json)
 
 
-@app.put("/user/viewSettings", response_class=Response)
-async def save_user_view_settings(html_fragment: str = Body(None, media_type="text/html")):
+@app.put("/user/viewSettings/{dashboardId}", response_class=Response)
+async def save_user_view_settings(dashboardId, html_fragment: str = Body(None, media_type="text/html")):
+    regexp = re.compile("^[a-zA-Z0-9_]*$")
+    if not re.match(regexp, dashboardId):
+        return Response(status_code=403)
     # Path to the "user_view.html" file
-    file_path = os.path.join("view", "user_view.html")
+    directory_path = os.path.join("view", "custom_dashboards")
+    file_path = os.path.join(directory_path, f"{dashboardId}_dashboard.html")
+
+    # Create the directory if it doesn't exist
+    os.makedirs(directory_path, exist_ok=True)
 
     # Check if the HTML fragment is None or empty
     if html_fragment is None or html_fragment.strip() == "":

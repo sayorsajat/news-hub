@@ -1,12 +1,18 @@
+import re
+import logging
+
+
 def measureUrgency(article, keywords):
-    mostUrgentKeyword = getMostImportantKeyword(article, keywords)
+    mostUrgentKeyword = getMostImportantKeyword(article.lower(), keywords)
     urgency = 0
 
     for keyword, weight in mostUrgentKeyword.items():
-        if article.find(keyword) != -1:
-            urgency = weight
+        if article.lower().find(keyword.lower()) != -1:
+            urgency += weight
 
-    urgency += calculateUrgencyOfTheRestKeywords(article, keywords, mostUrgentKeyword)
+    urgency += measureError(article.lower())
+    urgency += calculateUrgencyOfTheRestKeywords(article.lower(), keywords, mostUrgentKeyword)
+
 
     return urgency
 
@@ -16,7 +22,7 @@ def getMostImportantKeyword(article, keywords):
 
     for keyword_obj in keywords:
         for keyword, weight in keyword_obj.items():
-            if article.find(keyword) == -1:
+            if article.find(keyword.lower()) == -1:
                 continue
             if weight > list(mostUrgentKeyword.values())[0]:
                 mostUrgentKeyword = keyword_obj
@@ -33,10 +39,41 @@ def calculateUrgencyOfTheRestKeywords(article, keywords, mostUrgentKeyword):
 
     for keyword_obj in keywords:
         for keyword, weight in keyword_obj.items():
-            if keyword == keywordToSkip:
+            if keyword.lower() == keywordToSkip.lower():
                 continue
 
-            if article.find(keyword) != -1:
+            if article.find(keyword.lower()) != -1:
                 auxiliaryUrgency += weight * 0.2
 
     return auxiliaryUrgency
+
+
+def measureError(article):
+    splittedArticle = article.split("~", 1)
+    heading = splittedArticle[0]
+    content = splittedArticle[1]
+
+
+    if content.find("error while collecting") != -1:
+        return -100
+
+    # Convert the heading and content to lowercase
+    heading_lower = heading.lower()
+    content_lower = content.lower()
+
+    # Tokenize the heading into words
+    heading_words = set(re.findall(r'\b\w+\b', heading_lower))
+
+    # Tokenize the content into words
+    content_words = set(re.findall(r'\b\w+\b', content_lower))
+
+    # Check if any word from the heading is in the content
+    for word in heading_words:
+        if word in content_words:
+            return 0
+
+    # If no common words were found, return -10
+    return -10
+
+
+
