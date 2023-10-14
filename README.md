@@ -14,7 +14,7 @@ dbname=name_of_db_you_created
 user_name=name_of_user_that_has_access_to_database
 user_pass=password_of_the_user
 ```
-postgres_host and postgres_port may be different for you, but usually the values ​​are like this
+postgres_host and postgres_port may be different for you, but usually the values are like this
 
 then install python dependencies by 
 ```
@@ -31,9 +31,16 @@ url_of_your_website;no
 ```
 It depends on whether the description of the news is available to everyone
 
+To add RSS to gather from, add full rss link to /lib/RSSList.csv
+
 ### TODO:
 - [x] description gathering
 - [x] gui for news viewing
 - [x] urgency measurement
-- [ ] multiple dashboards accessed by id
+- [x] multiple dashboards accessed by id
+- [x] proxy support (via proxy.py file creation)
+- [x] RSS support
+- [ ] News APIs support
+- [ ] Social Media support
+- [ ] Setup script
 - [ ] deploy

@@ -16,6 +16,7 @@ class NewsTable(Base):
     title = Column(String)
     descriptionUrl = Column(String, unique=True)
     content = Column(String)
+    summary = Column(String)
     language = Column(String)
     source = Column(String)
     created_at = Column(DateTime, default=func.now())

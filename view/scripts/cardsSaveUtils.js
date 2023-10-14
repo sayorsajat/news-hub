@@ -70,12 +70,14 @@ export async function updateCards() {
             continue;
         }
 
-        let urgency = urgencyToColorClass(news[0].urgency)
+
+
+        let urgency = urgencyToColorClass(news[0].urgency);
         // set indicator level
         cards[i].querySelector("#indicator").classList.add(urgency);
         // set title and content of news for card
         cards[i].querySelector("#heading").innerHTML = news[0].title;
-        cards[i].getElementsByClassName("card-content")[0].innerHTML = news[0].content;
+        cards[i].getElementsByClassName("card-content")[0].innerHTML = news[0].summary;
         const link = cards[i].getElementsByTagName("a")[0];
         link.href = news[0].descriptionUrl;
         link.innerHTML = news[0].source;

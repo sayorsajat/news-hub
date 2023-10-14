@@ -128,8 +128,7 @@ input:placeholder-shown {
 
 .card {
   background-color: #ffffff;
-  max-width: 260px;
-  min-width: 100px;
+  width: 250px;
   border-radius: 0 0 10px 10px;
   max-height: min(39.8vh, 430px);
   min-height: 39.8vh;

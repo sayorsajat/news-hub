@@ -8,6 +8,8 @@ from models.engine import Session
 from models.news_model import NewsTable
 from sqlalchemy import or_, and_
 from typing import List
+
+from parsing.parse_titles import create_base_url
 from urgency_meter import measureUrgency
 import re
 
@@ -19,9 +21,10 @@ def news_to_dict(news):
         "type": news.type,
         "title": news.title,
         "descriptionUrl": news.descriptionUrl,
-        "content": str(news.content),
+        #"content": str(news.content),
+        "summary": news.summary,
         "language": news.language,
-        "source": news.source,
+        "source": create_base_url(news.source),
     }
 
 
@@ -93,7 +96,7 @@ async def get_recent_news(keywords: List[dict]):
     response_data = []
 
     # Sort the news by urgency in descending order
-    urgency_data = [(news, measureUrgency(news.title + "\n ~ " + news.content, keywords)) for news in recent_news]
+    urgency_data = [(news, measureUrgency(news.title + "\n ~ " + news.content + "\n" + news.summary, keywords)) for news in recent_news]
     urgency_data.sort(key=lambda x: x[1], reverse=True)
 
     # Get the two most urgent news items

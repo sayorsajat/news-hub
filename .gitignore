@@ -5,3 +5,4 @@ backup.csv
 user_view.html
 .idea/
 custom_dashboards/
+proxy.py
